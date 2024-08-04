@@ -9,3 +9,8 @@ Our software is called Meta Scan. It is a billing software to help with MediCAL 
 <br>William Struve - https://github.com/struv
 <br>Jessica Luu - https://github.com/jluu034
 <br>Arman Seth - https://github.com/armanseth
+
+## Features
+
+1. **Document Upload**: Allows users to upload medical documents.
+2. **Data Extraction**: Returns a CSV with selected fields of data.
