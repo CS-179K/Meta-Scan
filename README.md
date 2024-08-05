@@ -33,7 +33,12 @@ Our software is called Meta Scan. It is a billing software to help Medical provi
 5. **Cross-Platform Compatibility**
 6. **Support and Documentation**
 
-### Techniques Required
+### Techniques
+1. **Programming Languages**: Python
+2. **Web Dev Tools**: HTML/CSS/JS
+3. **JS Frameworks**: React/Node.js
+
+### Python Libraries:
 1. **OpenCV**: image processing
 2. **PyTesseract**: img -> text
 3. **Pandas**: data manipulation
