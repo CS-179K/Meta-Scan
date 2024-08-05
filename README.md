@@ -22,3 +22,7 @@ Our software is called Meta Scan. It is a billing software to help Medical provi
 6. **Interface**: There will be an intuitive interface to download and use the program.
 7. **Cross-Platforming**: Different devices on different Operating Systems can use the application.
 8. **Feedback**: Users can send comments and questions for developers to answer.
+
+
+## Architecture
+![meta_scan_architecture](https://github.com/user-attachments/assets/bf7e0851-ecc9-4cbd-ad06-26af4615f3da)
