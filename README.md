@@ -12,13 +12,6 @@ Our software is called Meta Scan. It is a billing software to help Medical provi
 <br>It is meant to expedite the current practice of manually entering the paper data.
 <br>
 
-## Techniques Required
-1. **OpenCV**: image processing
-2. **PyTesseract**: img -> text
-3. **Pandas**: data manipulation
-4. **Tkinter or PyQt**: UI
-<br>
-
 
 ### Major Functional Features
 1. **Document Upload**: Allows users to upload medical documents. (Story Points: 3)
@@ -32,7 +25,7 @@ Our software is called Meta Scan. It is a billing software to help Medical provi
 9. **Interface**: There will be an intuitive interface to download and use the program. (Story Points: 2)
 10. **Feedback**: Users can send comments and questions for developers to answer. (Story Points: 2)
 
-Non-Functional Features
+### Non-Functional Features
 1. **Performance and Speed**
 2. **Scalability**
 3. **Security and Privacy**
@@ -40,6 +33,11 @@ Non-Functional Features
 5. **Cross-Platform Compatibility**
 6. **Support and Documentation**
 
+### Techniques Required
+1. **OpenCV**: image processing
+2. **PyTesseract**: img -> text
+3. **Pandas**: data manipulation
+4. **Tkinter or PyQt**: UI
 
 ## Architecture
 ![meta_scan_architecture](https://github.com/user-attachments/assets/bf7e0851-ecc9-4cbd-ad06-26af4615f3da)
