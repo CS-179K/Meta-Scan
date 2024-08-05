@@ -21,14 +21,16 @@ Our software is called Meta Scan. It is a billing software to help Medical provi
 
 ## Features
 
-1. **Document Upload**: Allows users to upload medical documents.
-2. **Data Extraction**: Returns a CSV with selected data fields.
-3. **Data Clustering**: Multiple documents can be uploaded at once and returned in a shared file.
-4. **Tutorial/Help**: A tutorial video or instructions tab to use the software.
-5. **Document Validation**: The documents will automatically catch basic errors and discrepancies.
-6. **Interface**: There will be an intuitive interface to download and use the program.
-7. **Cross-Platforming**: Different devices on different Operating Systems can use the application.
-8. **Feedback**: Users can send comments and questions for developers to answer.
+1. **Document Upload**: Allows users to upload medical documents. (Story Points: 3)
+2. **Data Extraction**: Returns a CSV with selected data fields. (Story Points: 6)
+3. **Data Extraction**:  Returns a CSV with selected data fields. (Story Points: 2)
+4. **Document Validation**: The documents will automatically catch basic errors and discrepancies.
+5. **Data Clustering**: Multiple documents can be uploaded at once and returned in a shared file. (Story Points: 4)
+6. **Data Manipulation**: The user can choose what data they want and want to discard. (Story Points: 2)
+7. **Cross-Platforming**: Different devices on different Operating Systems can use the application. (Story Points: 4)
+8. **Tutorial/Help**: A tutorial video or instructions tab to use the software. (Story Points: 1)
+9. **Interface**: There will be an intuitive interface to download and use the program. (Story Points: 2)
+10. **Feedback**: Users can send comments and questions for developers to answer. (Story Points: 2)
 
 
 ## Architecture
