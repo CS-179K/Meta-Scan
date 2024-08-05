@@ -1,0 +1,7 @@
+1. Times New Roman font recognition test
+2. Handwriting recognition test
+3. Invalid Character test
+4. Different uploaded image resolution test
+5. Different image crop sizes for processing 
+6. Text contrast testing 
+7. UI functionality testing for preliminary buttons
