@@ -1,4 +1,4 @@
-# Read Me
+# Meta Scan
 ## Team
 <br>Ali Naqvi - https://github.com/anaqv007
 <br>William Struve - https://github.com/struv
