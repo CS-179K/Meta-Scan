@@ -1,7 +1,8 @@
-1. Times New Roman font recognition test
-2. Handwriting recognition test
-3. Invalid Character test
-4. Different uploaded image resolution test
-5. Different image crop sizes for processing 
-6. Text contrast testing 
-7. UI functionality testing for preliminary buttons
+1. Make sure that OCR recognizes the sentence: "This is a test sentence" written in Times New Roman font.
+2. Make sure that OCR recognizes the sentence: "This is a test sentence" written in three different handwritings. 
+3. Ensure the OCR does not process an invalid character within the text "This is a test @!".
+4. Test the OCR's accuracy based on 3 different resolutions of the uploaded images.
+5. Try 5 different image crop sizes with openCV to be processed with the OCR and verify the output matches the expected output 
+6. Test 4 different text contrast levels to see OCR performance.  
+7. Make sure that when pressing upload the user selected image uploads. 
+8. Make sure that when the process button is pressed the openCV and OCR are called to run on the user-specified image. 
