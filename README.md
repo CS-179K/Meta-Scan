@@ -10,7 +10,12 @@ Our software is called Meta Scan. It is a billing software to help Medical provi
 <br>It is meant to expedite the current practice of manually entering the paper data.
 <br>
 
-
+## Techniques Required
+1. **OpenCV**: image processing
+2. **PyTesseract**: img -> text
+3. **Pandas**: data manipulation
+4. **Tkinter or PyQt**: UI
+<br>
 
 ## Features
 
