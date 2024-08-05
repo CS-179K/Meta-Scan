@@ -19,8 +19,8 @@ Our software is called Meta Scan. It is a billing software to help Medical provi
 4. **Tkinter or PyQt**: UI
 <br>
 
-## Features
-
+## Details
+### Major Functional Features
 1. **Document Upload**: Allows users to upload medical documents. (Story Points: 3)
 2. **Data Extraction**: Returns a CSV with selected data fields. (Story Points: 6)
 3. **Data Extraction**:  Returns a CSV with selected data fields. (Story Points: 2)
