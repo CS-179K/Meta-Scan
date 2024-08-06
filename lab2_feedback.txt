@@ -1,0 +1,52 @@
+____ user stories ____
+
+"Scalability"
+Why does everyone want to tackle scalability.
+You have no users.
+// Phrased a little bit more seriously ...
+// 
+// It's valuable to not solve problems you don't have.
+// Every tool has tradeoffs, there is no perfect hammer.
+//
+// But that also implies if you solve a problem you don't have,
+// you are implicitly doing work to be worse at a problem you do have
+
+Very cool project though, actually the kind of thing many offices need.
+Done right this could be a very real service.
+
+When I was in undergrad I worked in a microbiology labratory for a summer.
+And during that summer we had to take measurements of uniform petri dishes.
+We used a ton of man hours, and did not get replicatable results.
+
+This sort of automation is actually an extremely likely use for AI automation.
+And one which is not at all trivial for people outside of the field to accomplish.
+
+
+
+____ sprint board ____
+
+tasks:
++
+
+tests:
+Your test cases are a bit sparse.
+
+And you want generally want these two things to be true:
+    Does the phrasing of your test make sense to an end user? // "User Perspective"
+    Is it obvious how to convert your test into a unit test? // test "case"
+
+Hopefully that's because y'all are planning on prototyping quickly and will write test cases as you go.
+// Rather than because you don't plan on testing non-manually ^_^;;
+// (Although in truth that works fine for some projects)
+
+
+____ conc. ____
+
+Neat project.
+On Thursday's lab we're going to want a UI wireframe.
+And of course it'd be good to verify if the OCR libraries work for your goal by then.
+// There are certainly libraries that should be able to do the task. So that's a good sign.
+
+
+6/6
+
