@@ -1,1 +1,7 @@
-Hello World
+1. Test different resolutions of ub004 input
+2. Detect incorrect form submission
+3. Detect correct ub-04 form submission
+4. Test if Birthday exists
+5. Test if transformed document margin sizes fall within acceptabe range
+6. Test upload button calls ocr python script
+7. Test view documents button routes to correct page and contians the right data
