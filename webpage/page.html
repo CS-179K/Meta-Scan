@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta-Scan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        Meta-Scan
+        <nav>
+            <a href="#">Home</a> |
+            <a href="#">About</a>
+        </nav>
+    </div>
+    <div class="container">
+        <button id="viewDocuments" data-tooltip="View documents">View Documents</button>
+        <button id="uploadButton" data-tooltip="Upload a document">Upload</button>
+        <input type="file" id="fileInput" style="display: none;">
+    </div>
+    <div id="loader" class="loader"></div>
+    <div class="image-container">
+        <h3>Example Document</h3>
+        <img src="image.png" alt="Example Document" class="example-image">
+    </div>
+    <script src="script.js"></script> 
+</body>
+</html>
