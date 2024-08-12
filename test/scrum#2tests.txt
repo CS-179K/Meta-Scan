@@ -1,4 +1,4 @@
-1. Test different resolutions of ub004 input
+1. Test different resolutions of ub-04 input
 2. Detect incorrect form submission
 3. Detect correct ub-04 form submission
 4. Test if Birthday exists
