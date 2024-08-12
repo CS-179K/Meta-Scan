@@ -1,7 +1,20 @@
-1. Test different resolutions of ub-04 input
-2. Detect incorrect form submission
-3. Detect correct ub-04 form submission
-4. Test if Birthday exists
-5. Test if transformed document margin sizes fall within acceptabe range
-6. Test upload button calls ocr python script
-7. Test view documents button routes to correct page and contians the right data
+Test 500x1500 resolution is ocr readable
+Test 1000x3000 resolution is ocr readable
+Test 2000x6000 resolution is ocr readable
+Test w-2 form is detected as incorrect
+Test ub-04 form is correct
+Test incorrect file types will be rejected
+Test that numbers are inputted (not letters or symbols)
+Test that inputted numbers are positive
+Test the birthday format is in Y/Month/Day is rejected
+Make sure the year field < 2024
+Make sure the year field > 1900
+Make sure month is less than 12
+Make sure day is less than 32
+Test that the top margin is within 14-17px
+Test that the side margin is within 14-17px
+Test upload button calls ocr python script
+Test upload button outputs confirmation in terminal
+Test view documents button routes to correct page
+Test view documents contians the right data
+Test that 2 form data ouputs are recieved from 2 different inputs
