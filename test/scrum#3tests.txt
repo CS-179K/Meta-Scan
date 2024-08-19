@@ -7,6 +7,7 @@ Test to see sorting data via age
 Test to see that there is a downloadable CSV file for 1 uploaded document
 Test to see that there are 2 separate downloadable CSV files per document
 Test to see that there are no downloadable CSV's if no documents have been uploaded
+Test to verify that the downloadable CSV matches correctly with the JSON version of the data
 Test to see if the JSON file is correctly formatted with proper values
 Test to see that the GUI output is readable to the user
 Test to see that the feedback button works and that the user can submit feedback
@@ -16,3 +17,5 @@ Test to make sure animations do not slow down output or mess up extracted data
 Test to verify that value codes are being read correctly 
 Test to verify that payer names are being read correctly 
 Test to verify that insured info is read correctly 
+Test to verify that the feedback only accepts a maximum of 200 words
+Test to verify that the feedback rejects any input over 200 words 
