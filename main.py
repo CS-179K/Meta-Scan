@@ -3,7 +3,7 @@ import pytesseract
 import csv
 
 # Load image
-image_path = 'ub04-online-6.jpg'
+image_path = 'ub04-online.jpg'
 image = Image.open(image_path)
 
 width = 2550
@@ -19,7 +19,7 @@ final_text = extracted_text.strip()
 print("Form Type: ")
 print(final_text)
 if final_text != "UB-04":
-    exit
+    exit()
 
 labels = ['Patient control num','Medical Recipient num', 'bill-type', 'fed tax num', 'statement from',
           'statement to', 'patient name', 'address a', 'address b', 'address c', 
@@ -130,8 +130,6 @@ for val in range(len(labels)):
             roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
             final_text = final_text + ', ' + pytesseract.image_to_string(roi).strip()  
 '''
-
-
 
 image.show()
 print(final_text)
