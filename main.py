@@ -3,7 +3,7 @@ import pytesseract
 import csv
 
 # Load image
-image_path = 'ub04-online.jpg'
+image_path = 'ub04-online-8.jpg'
 image = Image.open(image_path)
 
 width = 2550
@@ -19,6 +19,7 @@ final_text = extracted_text.strip()
 print("Form Type: ")
 print(final_text)
 if final_text != "UB-04":
+    print("Wrong form type")
     exit()
 
 labels = ['Patient control num','Medical Recipient num', 'bill-type', 'fed tax num', 'statement from',
@@ -63,10 +64,12 @@ Height = [101, 151, 151, 250, 250,
           552, 552]
 draw = ImageDraw.Draw(image)
 final_text = ''
+'''
 for val in range(len(labels)):
     draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
     roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
     final_text = final_text + ', ' + pytesseract.image_to_string(roi).strip()
+    '''
 
 claimCodes=[906, 955, 1006, 1055, 1106, 1155, 1206, 1255, 1306, 1355, 1406, 1455, 
 1506, 1555, 1606, 1655, 1706, 1755, 1806, 1855, 1906, 1955]
@@ -88,12 +91,16 @@ for i in range(22):
         i = i - 1
         print(Description + '\n')
 
-
-
-'''
 # categorize the sections so the user can choose what they want to get in the csv
 draw = ImageDraw.Draw(image)
 final_text = ''
+
+patient_info = 0
+admit_discharge_info = 0
+insurance_info = 1
+provider = 0
+occurance_info = 0
+
 for val in range(len(labels)):
     #patient info
     if patient_info == 1:
@@ -129,7 +136,7 @@ for val in range(len(labels)):
             draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
             roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
             final_text = final_text + ', ' + pytesseract.image_to_string(roi).strip()  
-'''
+
 
 image.show()
 print(final_text)
