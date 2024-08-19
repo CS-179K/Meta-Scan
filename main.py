@@ -3,8 +3,23 @@ import pytesseract
 import csv
 
 # Load image
-image_path = '.\\ub04-online-6.jpg'
+image_path = 'ub04-online-6.jpg'
 image = Image.open(image_path)
+
+width = 2550
+height = 3300
+image = image.resize((width, height))
+
+draw = ImageDraw.Draw(image)
+
+form = image.crop((34, 3204, 107, 3228))
+extracted_text = pytesseract.image_to_string(form)
+final_text = extracted_text.strip()
+
+print("Form Type: ")
+print(final_text)
+if final_text != "UB-04":
+    exit
 
 labels = ['Patient control num','Medical Recipient num', 'bill-type', 'fed tax num', 'statement from',
           'statement to', 'patient name', 'address a', 'address b', 'address c', 
@@ -74,6 +89,47 @@ for i in range(22):
         print(Description + '\n')
 
 
+
+'''
+# categorize the sections so the user can choose what they want to get in the csv
+draw = ImageDraw.Draw(image)
+final_text = ''
+for val in range(len(labels)):
+    #patient info
+    if patient_info == 1:
+        if labels[val] == 'Patient control num' or labels[val] == 'patient name' or labels[val] == 'birthdate' or labels[val] == 'sex' or labels[val] == 'patient status':
+            draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
+            roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
+            final_text = final_text + ', ' + pytesseract.image_to_string(roi).strip()
+
+    #admission and discharge info
+    if admit_discharge_info == 1:
+        if labels[val] == 'admission date' or labels[val] == 'admission type' or labels[val] == 'admission hour' or labels[val] == 'discharge hour' or labels[val] == 'admission src':
+            draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
+            roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
+            final_text = final_text + ', ' + pytesseract.image_to_string(roi).strip()        
+    
+    #insurance and financial info
+    if insurance_info == 1:
+        if labels[val] == 'bill-type' or labels[val] == 'Medical Recipient num' or labels[val] == 'fed tax num' or labels[val] == 'stat' or labels[val] == 'cc' or labels[val] == 'ACDT':
+            draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
+            roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
+            final_text = final_text + ', ' + pytesseract.image_to_string(roi).strip()  
+
+    #provider info
+    if provider == 1:
+        if labels[val] == 'statement to' or labels[val] == 'address a' or labels[val] == 'address b' or labels[val] == 'address c' or labels[val] == 'address d' or labels[val] == 'address e' or labels[val] == 'statement from':
+            draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
+            roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
+            final_text = final_text + ', ' + pytesseract.image_to_string(roi).strip()  
+
+    #occurance info
+    if occurance_info == 1:
+        if labels[val] == 'occurence code 1' or labels[val] == 'occurance date 1' or labels[val] == 'occurence code 2' or labels[val] ==  'occurence date 2' or labels[val] == 'occurence code 3' or labels[val] ==  'occurence date 3'  or labels[val] == 'occurence code 4' or labels[val] ==  'occurence date 4' or labels[val] == 'span 1 code' or labels[val] == 'span 1 from' or labels[val] == 'span 1 through' or labels[val] == 'span 2 code' or labels[val] == 'span 2 from' or labels[val] == 'span 2 through':
+            draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
+            roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
+            final_text = final_text + ', ' + pytesseract.image_to_string(roi).strip()  
+'''
 
 
 
