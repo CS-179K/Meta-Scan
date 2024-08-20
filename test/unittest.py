@@ -1,9 +1,9 @@
-//unittest.py
+#unittest.py
 import pytesseract
 from PIL import Image
 import unittest
 
-//setup
+#setup
 class PyTesseractTest(unittest.TestCase):
     def setUp(self):
         # Set up any necessary environment variables or paths here
@@ -13,7 +13,7 @@ class PyTesseractTest(unittest.TestCase):
         # Clean up any resources here
         pass
 		
-//test cases
+#test cases
 class PyTesseractTest(unittest.TestCase):
     # ... setUp and tearDown methods
 
@@ -49,5 +49,5 @@ class PyTesseractTest(unittest.TestCase):
     def test_language_specific(self):
         # Test with different languages if supported
         pass
-//run with if __name__ == '__main__':
-//unittest.main()
+#run with if __name__ == '__main__':
+#unittest.main()
