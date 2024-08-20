@@ -46,3 +46,15 @@ Our software is called Meta Scan. It is a billing software to help Medical provi
 
 ## Architecture
 ![meta_scan_architecture](https://github.com/user-attachments/assets/bf7e0851-ecc9-4cbd-ad06-26af4615f3da)
+
+## Install
+Our project uses the pytest framework for unit testing. Run the following commands to install:
+```
+pip install pytest
+python.exe -m pip install --upgrade --user pip
+```
+
+<br>To run:
+```
+python -m pytest
+```
