@@ -51,7 +51,6 @@ Our software is called Meta Scan. It is a billing software to help Medical provi
 Our project uses the pytest framework for unit testing. Run the following commands to install:
 ```
 pip install pytest
-python.exe -m pip install --upgrade --user pip
 ```
 
 <br>To run:
