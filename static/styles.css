@@ -31,7 +31,7 @@ nav a:hover {
 }
 
 .container {
-    margin-top: 20px;
+    margin: 20px auto;
 }
 
 button {
@@ -57,6 +57,11 @@ button {
 }
 
 #uploadButton {
+    background-color: #008CBA;
+    color: white;
+}
+
+#submitButton {
     background-color: #008CBA;
     color: white;
 }
@@ -114,4 +119,22 @@ button:hover::after {
     border: 2px solid #ddd;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+select, textarea{
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
 }

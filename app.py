@@ -4,6 +4,9 @@ import os
 from werkzeug.utils import secure_filename
 import traceback
 import json
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 app = Flask(__name__, static_folder='static')
 UPLOAD_FOLDER = 'uploads'
@@ -69,6 +72,45 @@ def document_output():
 @app.route('/documents')
 def documents():
     return render_template('documents.html')
+
+@app.route('/feedback')
+def feedback():
+    return render_template('feedback.html')
+
+#smtp uses the email and sends an email to itself using the feedback info
+SMTP_SERVER = 'smtp.gmail.com'
+SMTP_PORT = 587
+SMTP_USER = 'MetaScanSpprt@gmail.com'
+SMTP_APPPASSWORD = 'iynl ferj vies kfjx'
+SUPPORT_EMAIL = 'MetaScanSpprt@gmail.com'
+
+@app.route('/submit-feedback', methods=['POST'])
+def submit_feedback():
+    data = request.json
+    feedback_type = data.get('type')
+    feedback_text = data.get('text')
+        
+    msg = MIMEMultipart()
+    msg['From'] = SMTP_USER
+    msg['To'] = SUPPORT_EMAIL
+    msg['Subject'] = 'New Feedback Submitted!'
+
+    body = f"Feedback Type: {feedback_type} \n\nFeedback: {feedback_text}"
+    msg.attach(MIMEText(body, 'plain'))
+    
+    try:
+        #smtp sends email
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USER, SMTP_APPPASSWORD)
+            server.send_message(msg)
+        return jsonify({"message": "Feedback submitted successfully!"}), 200
+    except smtplib.SMTPException as e:
+        app.logger.error(f"SMTP error{str(e)}")
+        return jsonify({"error": 'Failed to send feedback due to SMTP error'}), 500
+    except Exception as e:
+        app.logger.error(f"Failed to send email{str(e)}")
+        return jsonify({'error': 'Failed to send feedback'}), 500
 
 if __name__ == '__main__':
     if not os.path.exists(UPLOAD_FOLDER):
