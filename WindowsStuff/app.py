@@ -195,12 +195,73 @@ def process_image(image_path):
     Width += Width2
     Height += Height2
 
+    patient_info = 1
+    admit_discharge_info = 1
+    insurance_info = 1
+    provider = 1
+    occurance_info = 1
+    value_codes = 1
+    # categorize the sections so the user can choose what they want to get in the csv
+    draw = ImageDraw.Draw(image)
+    final_text = ''
     for val in range(len(labels)):
-        draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
-        roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
-        extracted_text = pytesseract.image_to_string(roi).strip()
-        json_data[labels[val]] = extracted_text
-    
+        #draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
+        #patient info
+        if patient_info == 1:
+            if labels[val] == 'Patient control num' or labels[val] == 'patient name' or labels[val] == 'birthdate' or labels[val] == 'sex' or labels[val] == 'patient status':
+                draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
+                roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
+                extracted_text = pytesseract.image_to_string(roi).strip()
+                final_text = final_text + ', ' + extracted_text
+                json_data[labels[val]] = extracted_text
+
+        #admission and discharge info
+        if admit_discharge_info == 1:
+            if labels[val] == 'admission date' or labels[val] == 'admission type' or labels[val] == 'admission hour' or labels[val] == 'discharge hour' or labels[val] == 'admission src':
+                draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
+                roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
+                extracted_text = pytesseract.image_to_string(roi).strip()
+                final_text = final_text + ', ' + extracted_text
+                json_data[labels[val]] = extracted_text     
+        
+        #insurance and financial info
+        if insurance_info == 1:
+            if labels[val] == 'bill-type' or labels[val] == 'Medical Recipient num' or labels[val] == 'fed tax num' or labels[val] == 'stat' or labels[val] == 'cc' or labels[val] == 'ACDT':
+                draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
+                roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
+                extracted_text = pytesseract.image_to_string(roi).strip()
+                final_text = final_text + ', ' + extracted_text 
+                json_data[labels[val]] = extracted_text 
+
+        #provider info
+        if provider == 1:
+            if labels[val] == 'statement to' or labels[val] == 'address a' or labels[val] == 'address b' or labels[val] == 'address c' or labels[val] == 'address d' or labels[val] == 'address e' or labels[val] == 'statement from':
+                draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
+                roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
+                extracted_text = pytesseract.image_to_string(roi).strip()
+                final_text = final_text + ', ' + extracted_text
+                json_data[labels[val]] = extracted_text
+        #occurance info
+        if occurance_info == 1:
+            if labels[val] == 'occurence code 1' or labels[val] == 'occurence date 1' or labels[val] == 'occurence code 2' or labels[val] ==  'occurence date 2' or labels[val] == 'occurence code 3' or labels[val] ==  'occurence date 3'  or labels[val] == 'occurence code 4' or labels[val] ==  'occurence date 4' or labels[val] == 'span 1 code' or labels[val] == 'span 1 from' or labels[val] == 'span 1 through' or labels[val] == 'span 2 code' or labels[val] == 'span 2 from' or labels[val] == 'span 2 through':
+                draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
+                roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
+                extracted_text = pytesseract.image_to_string(roi).strip()
+                final_text = final_text + ', ' + extracted_text
+                json_data[labels[val]] = extracted_text
+        if value_codes == 1:
+            if 'value code' in labels[val] or 'value amount' in labels[val]:
+                draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
+                roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
+                extracted_text = pytesseract.image_to_string(roi).strip()
+                final_text = final_text + ', ' + extracted_text
+                json_data[labels[val]] = extracted_text
+        if val > 50:
+            draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
+            roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
+            extracted_text = pytesseract.image_to_string(roi).strip()
+            final_text = final_text + ', ' + extracted_text
+            json_data[labels[val]] = extracted_text
     return json_data
 
 if __name__ == '__main__':
