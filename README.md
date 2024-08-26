@@ -23,6 +23,21 @@ Installation Instructions
 7. Run the command python app.py in order to start the server
 8. Click on the link in the terminal in order to go to the webpage
 
+```
+sudo apt install pip
+pip install flask
+pip install pytest
+pip install pytesseract
+pip install flask
+
+//start server
+python app.py
+
+//run tests
+cd test
+python -m pytest
+```
+
 ## Usage Instructions
 **Upload Button** - Select the file with the UB-04 form to be processed <br/>
 **View Documents Button** - Takes you to another page where the processed information can be viewed. You can download the CSV, return to home, add more files, or leave feedback.<br/>
@@ -70,13 +85,3 @@ https://docs.google.com/document/d/1ot5YUuMUkqlNLCF3K9zoNZ_bk0Xqz00ZRUvFPL0qYXA/
 ## Architecture
 ![meta_scan_architecture](https://github.com/user-attachments/assets/bf7e0851-ecc9-4cbd-ad06-26af4615f3da)
 
-## Install
-Our project uses the pytest framework for unit testing. Run the following commands to install:
-```
-pip install pytest
-```
-
-<br>To run:
-```
-python -m pytest
-```
