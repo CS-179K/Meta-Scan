@@ -34,13 +34,6 @@ nav a:hover {
     margin: 20px auto;
 }
 
-.container2{
-    text-align: left;
-    margin: 20px auto;
-    padding: 10px 40px 10px 40px;
-
-}
-
 button {
     font-size: 18px;
     padding: 10px 20px;
@@ -68,14 +61,14 @@ button {
     color: white;
 }
 
-#submitButton {
-    background-color: #008CBA;
-    color: white;
-}
-
 #uploadButton:hover {
     background-color: #007bb5;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+#submitButton {
+    background-color: #008CBA;
+    color: white;
 }
 
 button::after {
@@ -145,4 +138,3 @@ select, textarea{
     border: 1px solid #ddd;
     font-size: 16px;
 }
-

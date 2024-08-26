@@ -2,14 +2,86 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Result</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta-Scan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
+<body>
+    <div class="header">
+        Meta-Scan
+        <nav>
+            <a href="#">Home</a> |
+            <a href="/about">About</a> |
+            <a href="/feedback">Leave Feedback</a>
+        </nav>
+    </div>
 <body>
     <h1>Processed JSON</h1>
     {% for document in json_data %}
         <h2>Document {{ loop.index }}</h2>
-        <pre>{{ document | tojson(indent=4) }}</pre>
+        <table>
+            <thead>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, value in document.items() %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td contenteditable="true">{{ value }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% endfor %}
+    <button id="saveButton">Save Changes</button>
     <a href="/">Upload Another Document</a>
+
+    <!-- JavaScript to handle saving edited values -->
+    <script>
+        document.getElementById('saveButton').addEventListener('click', function() {
+            let tables = document.querySelectorAll('table');
+            let updatedData = [];
+
+            tables.forEach(function(table, index) {
+                let rows = table.querySelectorAll('tbody tr');
+                let documentData = {};
+
+                rows.forEach(function(row) {
+                    let key = row.cells[0].innerText.trim();
+                    let value = row.cells[1].innerText.trim();
+                    documentData[key] = value;
+                });
+
+                updatedData.push(documentData);
+            });
+
+            // Send the updated data to the server via AJAX
+            fetch('/update-json', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the table with the new data
+                if (data.success) {
+                    alert('Changes saved successfully.');
+                    location.reload();  // Reload the page to reflect the changes
+                } else {
+                    alert('Failed to save changes.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while saving changes.');
+            });
+        });
+    </script>
 </body>
 </html>
