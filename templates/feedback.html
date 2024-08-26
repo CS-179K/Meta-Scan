@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<style>
+    .container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+<body>
+    <div class="header">
+        Leave Feedback
+        <nav>
+            <a href="/">Back to Upload</a>
+        </nav>
+    </div>
+    <div class="container">
+        <form id="feedbackForm">
+            <!--feedback type dropdown-->
+            <label for="feedbackType">Type of Feedback:</label>
+            <select id="feedbackType" name="feedbackType" required>
+                <option value="" disabled selected>Select feedback type</option>
+                <option value="Suggestion">Suggestion</option>
+                <option value="bug founf">Bug Found</option>
+                <option value="CSV Concern">CSV Concern</option>
+                <option value="Question">Question</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <!--feedback textbox-->
+            <label for="feedbackText">Your Feedback:</label>
+            <textarea id="feedbackText" name="feedbackText" rows="6" placeholder="Enter your feedback here..." required></textarea>
+
+            <!--submit button-->
+            <button id="submitButton" data-tooltip="Submit Feedback" >Submit Feedback</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const feedbackType = document.getElementById('feedbackType').value;
+            const feedbackText = document.getElementById('feedbackText').value;
+
+            const feedbackData = {
+                type: feedbackType,
+                text: feedbackText
+            };
+
+            fetch('/submit-feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(feedbackData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Feedback submitted successfully!');
+                //clears the form after feedback is submitted
+                document.getElementById('feedbackForm').reset();
+            })
+            .catch(error => {
+                console.error('Error submitting feedback:', error);
+                alert('There was an error submitting your feedback. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>

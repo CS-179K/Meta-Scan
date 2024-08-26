@@ -85,3 +85,19 @@ https://docs.google.com/document/d/1ot5YUuMUkqlNLCF3K9zoNZ_bk0Xqz00ZRUvFPL0qYXA/
 ## Architecture
 ![meta_scan_architecture](https://github.com/user-attachments/assets/bf7e0851-ecc9-4cbd-ad06-26af4615f3da)
 
+## Install
+<br>Install flask
+```
+pip install flask
+```
+
+### Testing
+<br>Our project uses the pytest framework for unit testing. Run the following commands to install:
+```
+pip install pytest
+```
+
+<br>To run:
+```
+python -m pytest
+```

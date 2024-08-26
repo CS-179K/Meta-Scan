@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta-Scan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        Meta-Scan
+        <nav>
+            <a href="#">Home</a> |
+            <a href="/about">About</a>
+        </nav>
+    </div>
+    <div class="container">
+        <!-- View Documents button -->
+        <button id="viewDocuments" data-tooltip="View documents">View Documents</button>
+        
+        <!-- Upload button and file input -->
+        <button id="uploadButton" data-tooltip="Upload a document">Upload</button>
+        <input type="file" id="fileInput" style="display: none;">
+    </div>
+    
+    <!-- Loader element -->
+    <div id="loader" class="loader" style="display: none;"></div>
+    
+    <div class="image-container">
+        <h3>Example Document</h3>
+        <img src="{{ url_for('static', filename='ub04-online.jpg') }}" alt="Example Document" class="example-image">
+    </div>
+
+    <!-- JavaScript files -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
