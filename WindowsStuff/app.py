@@ -39,16 +39,15 @@ def upload_file():
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(file_path)
         
-        # Process the image and get new data
+
         new_data = process_image(file_path)
         
-        # Load existing data
         existing_data = load_data()
         
-        # Append new data to existing data
+
         existing_data.append(new_data)
         
-        # Save updated data
+   
         save_data(existing_data)
         
         return render_template('upload.html', message="File uploaded successfully! Click 'View Documents' to see results.")
@@ -72,8 +71,7 @@ def process_image(image_path):
     
     json_data = {}
     
-    # Your labels and coordinates
-    # (Use your existing code here for labels, xVals, yVals, Width, Height)
+    
     labels = ['Patient control num','Medical Recipient num', 'bill-type', 'fed tax num', 'statement from',   #1
         'statement to', 'patient name', 'address a', 'address b', 'address c', #2
         'address d', 'address e','birthdate', 'sex', 'admission date', #3
