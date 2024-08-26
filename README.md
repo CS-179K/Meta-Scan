@@ -17,19 +17,20 @@ Installation Instructions
 1. Open the terminal and run the command sudo apt install git in order to install git
 2. Run the command git clone https://github.com/CS-179K/Meta-Scan.git in order to download MetaScan loacally
 3. Run the command sudo apt install pip in order to install pip
-4. Run the command pip install pytesseract in order to insall pytesseract
-5. Run the command pip install flask in order to install flask
-6. Run the command python app.py in order to start the server
-7. Click on the link in the terminal in order to go to the webpage
+4. Run the command pip install pytest in order to install pytest
+5. Run the command pip install pytesseract in order to insall pytesseract
+6. Run the command pip install flask in order to install flask
+7. Run the command python app.py in order to start the server
+8. Click on the link in the terminal in order to go to the webpage
 
 ## Usage Instructions
-Upload Button - Select the file with the UB-04 form to be processed
-View Documents Button - Takes you to another page where the processed information can be viewed. You can download the CSV, return to home, add more files, or leave feedback.
-Add More Files Button - Promts you to upload another file and the processed data is appeneded below the initial UB-04 form.
-Download Button - Downloads the CSV with the processed information to your files.
-Leave Feedback Button - Takes you to another page where you can select your feedback type and write out your feedback for MetaScan.
-Submit Feedback Button- Press to send your feedback.
-Home Button - Takes you back to the homepage.
+**Upload Button** - Select the file with the UB-04 form to be processed <br/>
+**View Documents Button** - Takes you to another page where the processed information can be viewed. You can download the CSV, return to home, add more files, or leave feedback.<br/>
+**Add More Files Button** - Promts you to upload another file and the processed data is appeneded below the initial UB-04 form.<br/>
+**Download Button** - Downloads the CSV with the processed information to your files.<br/>
+**Leave Feedback Button** - Takes you to another page where you can select your feedback type and write out your feedback for MetaScan.<br/>
+**Submit Feedback Button** - Press to send your feedback.<br/>
+**Home Button** - Takes you back to the homepage.
 
 ## Details
 ### Major Functional Features
