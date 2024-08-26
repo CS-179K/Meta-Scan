@@ -77,6 +77,10 @@ def documents():
 def feedback():
     return render_template('feedback.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 #smtp uses the email and sends an email to itself using the feedback info
 SMTP_SERVER = 'smtp.gmail.com'
 SMTP_PORT = 587
