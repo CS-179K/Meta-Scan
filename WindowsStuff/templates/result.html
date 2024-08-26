@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+</head>
+<body>
+    <h1>Processed JSON</h1>
+    {% for document in json_data %}
+        <h2>Document {{ loop.index }}</h2>
+        <pre>{{ document | tojson(indent=4) }}</pre>
+    {% endfor %}
+    <a href="/">Upload Another Document</a>
+</body>
+</html>
