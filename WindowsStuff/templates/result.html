@@ -3,60 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meta-Scan</title>
+    <title>Result</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
     <div class="header">
-        Meta-Scan
         <nav>
-            <a href="#">Home</a> |
-            <a href="/about">About</a> |
+            <a href="/">Back to Upload</a>
             <a href="/feedback">Leave Feedback</a>
         </nav>
     </div>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        td[contenteditable="true"] {
+            background-color: #eef;
+        }
+    </style>
+</head>
 <body>
     <h1>Processed JSON</h1>
-    {% for document in json_data %}
-        <h2>Document {{ loop.index }}</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Key</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for key, value in document.items() %}
-                    <tr>
-                        <td>{{ key }}</td>
-                        <td contenteditable="true">{{ value }}</td>
-                    </tr>
+    <table id="documentTable">
+        <thead>
+            <tr>
+                <th>Key</th>
+                {% for document in json_data %}
+                    <th>Document {{ loop.index }}</th>
                 {% endfor %}
-            </tbody>
-        </table>
-    {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for key in json_data[0].keys() %}
+                <tr>
+                    <td>{{ key }}</td>
+                    {% for document in json_data %}
+                        <td contenteditable="true">{{ document[key] }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     <button id="saveButton">Save Changes</button>
     <a href="/">Upload Another Document</a>
 
     <!-- JavaScript to handle saving edited values -->
     <script>
         document.getElementById('saveButton').addEventListener('click', function() {
-            let tables = document.querySelectorAll('table');
+            let table = document.getElementById('documentTable');
+            let rows = table.querySelectorAll('tbody tr');
             let updatedData = [];
 
-            tables.forEach(function(table, index) {
-                let rows = table.querySelectorAll('tbody tr');
-                let documentData = {};
+            rows.forEach(function(row, rowIndex) {
+                let key = row.cells[0].innerText.trim();
 
-                rows.forEach(function(row) {
-                    let key = row.cells[0].innerText.trim();
-                    let value = row.cells[1].innerText.trim();
-                    documentData[key] = value;
+                row.querySelectorAll('td').forEach(function(cell, cellIndex) {
+                    if (cellIndex > 0) {  // Skip the first cell as it contains the key
+                        let value = cell.innerText.trim();
+                        if (!updatedData[cellIndex - 1]) {
+                            updatedData[cellIndex - 1] = {};
+                        }
+                        updatedData[cellIndex - 1][key] = value;
+                    }
                 });
-
-                updatedData.push(documentData);
             });
 
             // Send the updated data to the server via AJAX
