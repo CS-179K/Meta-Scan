@@ -1,3 +1,4 @@
+
 document.getElementById('uploadButton').addEventListener('click', function() {
     document.getElementById('fileInput').click();
 });
@@ -6,6 +7,11 @@ document.getElementById('fileInput').addEventListener('change', function() {
     if (this.files && this.files.length > 0) {
         var formData = new FormData();
         formData.append('file', this.files[0]);
+
+        var checkboxes = document.querySelectorAll('input[name="checkbox"]:checked');
+        checkboxes.forEach(function(checkbox) {
+            formData.append('checkbox', checkbox.value);
+        });
 
         $.ajax({
             url: '/upload',

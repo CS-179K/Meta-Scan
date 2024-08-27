@@ -6,6 +6,7 @@
     <title>Meta-Scan</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
     <div class="header">
@@ -18,12 +19,24 @@
     </div>
     
     <div class="container">
-        <!-- Upload Image Section -->
-        <h1>Upload Image</h1>
-        <!-- Removed form element to allow AJAX handling -->
-        <button id="uploadButton" data-tooltip="Upload a document">Upload</button>
-        <input type="file" id="fileInput" name="file" accept="image/*" style="display: none;" required>
-        
+        <!-- Choose the Fields -->
+        <h1> Choose your Fields </h1>
+        <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
+            <div class="checkbox-container">
+                <label><input type="checkbox" name="checkbox" value="patient"> Patient Info</label>
+                <label><input type="checkbox" name="checkbox" value="admit_discharge"> Admit Discharge Info</label>
+                <label><input type="checkbox" name="checkbox" value="insurance"> Insurance Info</label>
+                <label><input type="checkbox" name="checkbox" value="provider"> Provider Info</label>
+                <label><input type="checkbox" name="checkbox" value="occurance"> Occurance Info</label>
+                <label><input type="checkbox" name="checkbox" value="value"> Value Codes</label>
+                <label><input type="checkbox" name="checkbox" value="payer"> Payer Info</label>
+            </div>
+            <!-- Upload Image Section -->
+            <h1>Upload Image</h1>
+            <!-- Removed form element to allow AJAX handling -->
+            <button id="uploadButton" data-tooltip="Upload a document">Upload</button>
+            <input type="file" id="fileInput" name="file" accept="image/*" style="display: none;" required>
+        </form>
         <!-- View Documents button -->
         <button id="viewDocuments" data-tooltip="View documents">View Documents</button>
     </div>
