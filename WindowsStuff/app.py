@@ -4,6 +4,7 @@ import pytesseract
 import json
 import os
 import smtplib
+import re
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -69,6 +70,23 @@ def view_documents():
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'jpg', 'jpeg', 'png'}
+
+
+#--Error Checking and Validation--
+err_array = [0] * 103
+
+#--some functions used for validation:
+#Checks MM-DD-YYYY format
+def validate_date(date_string):
+    # Regular expression pattern for MM-DD-YYYY format
+    pattern = r"^(0[1-9]|1[0-2])-(0[1-9]|1[0-2]|3[0-1])-\d{4}$"
+
+    # Check if the date string matches the pattern
+    if re.match(pattern, date_string):
+        return True
+    else:
+        return False
+#Tests for this are located in ../test/test_fieldValidation 
 
 def process_image(image_path, patient, admit_discharge, insurance, provider, occurance, value, payer):
     image = Image.open(image_path)
@@ -214,19 +232,132 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
             draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
             roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
             extracted_text = pytesseract.image_to_string(roi).strip()
-            final_text = final_text + ', ' + extracted_text
-            json_data[labels[val]] = extracted_text
-        elif patient == 0 and (labels[val] == 'Patient control num' or labels[val] == 'patient name' or labels[val] == 'birthdate' or labels[val] == 'sex' or labels[val] == 'patient status'):
-            final_text = final_text + ', '
-            json_data[labels[val]] = ''
+
+            #validation
+            #verify patient ctrl num is alphanumeric
+            if labels[val] == 'Patient control num':
+                if extracted_text.isalnum() :
+                    err_array[val] = 0
+                else:
+                    err_array[val] = 1
+                    print("Error: Invalid patient control number value:", extracted_text)
+
+            #verify patient name is alphabetical
+            elif 'patient name' in labels[val]:
+                if extracted_text.isalpha() :
+                    err_array[val] = 0
+                else:
+                    print("Error: Invalid patient name value:", extracted_text)
+                    err_array[val] = 1
+            
+            #verify date format and validity MM-DD-YYYY
+            elif 'birthdate' in labels[val]:
+                if validate_date(extracted_text):
+                    err_array[val] = 0
+                else:
+                    print("Error: Invalid birthdate value:", extracted_text)
+                    err_array[val] = 1
+
+            #M or F
+            elif 'sex' in labels[val]:
+                extracted_text = extracted_text.upper()  # Convert to uppercase for case-insensitive comparison
+                if extracted_text not in ('M', 'F'):
+                    # Handle invalid sex value
+                    print("Error: Invalid sex value:", extracted_text)
+                    err_array[val] = 1
+                else:
+                    # Valid sex value, set labels[val] to 0
+                    err_array[val] = 0
+
+            #01-19, 30, numeric
+            elif 'patientStatus' in labels[val]:
+                extracted_text = extracted_text.strip()  # Remove leading/trailing whitespace
+                try:
+                    age = int(extracted_text)
+                    if 0 <= age <= 19 or age == 30:
+                        err_array[val] = 0
+                    else:
+                        print("Error: Invalid patient status value:", extracted_text)
+                        err_array[val] = 1
+                except ValueError:
+                    print("Error: Invalid patient status format:", extracted_text)
+                    err_array[val] = 1
 
         #admission and discharge info
         if admit_discharge == 1 and ('admission' in labels[val] or labels[val] == 'discharge hour'):
             draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
             roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
             extracted_text = pytesseract.image_to_string(roi).strip()
+
+            #validation
+            #consider checking if outpatient(causes many cases to be optional)
+            #'admission date', 'admission hour', 'admission type', 'admission src'
+            #admission date
+            if 'admission date' in labels[val]:
+                if validate_date(extracted_text):
+                    err_array[val] = 0
+                else:
+                    print("Error: Invalid admission date value:", extracted_text)
+                    err_array[val] = 1
+            
+            #admission hour
+            elif 'admission hour' in labels[val]:
+                #extracted_text = extracted_text.strip()  # Remove leading/trailing whitespace
+                try:
+                    hour = int(extracted_text)
+                    if 0 <= hour <= 23:
+                        err_array[val] = 0
+                    else:
+                        print("Error: Invalid admission hour value:", extracted_text)
+                        err_array[val] = 1
+                except ValueError:
+                    print("Error: Invalid admission hour format:", extracted_text)
+                    err_array[val] = 1
+
+            #admission type
+            elif 'admission type' in labels[val]:
+                #extracted_text = extracted_text.strip()  # Remove leading/trailing whitespace
+                try:
+                    type = int(extracted_text)
+                    if 0 <= type <= 3 or type == 5 or type == 9:
+                        err_array[val] = 0
+                    else:
+                        print("Error: Invalid admission type value:", extracted_text)
+                        err_array[val] = 1
+                except ValueError:
+                    print("Error: Invalid admission type format:", extracted_text)
+                    err_array[val] = 1
+
+            #admission src
+            elif 'admission src' in labels[val]:
+                #extracted_text = extracted_text.strip()  # Remove leading/trailing whitespace
+                try:
+                    src = int(extracted_text)
+                    if 0 <= src <= 9:
+                        err_array[val] = 0
+                    else:
+                        print("Error: Invalid admission src value:", extracted_text)
+                        err_array[val] = 1
+                except ValueError:
+                    print("Error: Invalid admission src format:", extracted_text)
+                    err_array[val] = 1
+
+            #discharge hour
+            elif 'discharge hour' in labels[val]:
+                #extracted_text = extracted_text.strip()  # Remove leading/trailing whitespace
+                try:
+                    hour = int(extracted_text)
+                    if 0 <= hour <= 23:
+                        err_array[val] = 0
+                    else:
+                        print("Error: Invalid discharge hour value:", extracted_text)
+                        err_array[val] = 1
+                except ValueError:
+                    print("Error: Invalid discharge hour format:", extracted_text)
+                    err_array[val] = 1
+
             final_text = final_text + ', ' + extracted_text
-            json_data[labels[val]] = extracted_text  
+            json_data[labels[val]] = extracted_text
         elif admit_discharge == 0 and ('admission' in labels[val] or labels[val] == 'discharge hour'):
             final_text = final_text + ', '
             json_data[labels[val]] = ''
@@ -286,6 +417,9 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
             final_text = final_text + ', '
             json_data[labels[val]] = ''
     return json_data
+
+for element in err_array:
+    print(element)
 
 @app.route('/feedback')
 def feedback():
