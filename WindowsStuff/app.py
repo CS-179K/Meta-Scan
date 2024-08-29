@@ -282,6 +282,12 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
                 except ValueError:
                     print("Error: Invalid patient status format:", extracted_text)
                     err_array[val] = 1
+                    
+            final_text = final_text + ', ' + extracted_text
+            json_data[labels[val]] = extracted_text
+        elif patient == 0 and (labels[val] == 'Patient control num' or labels[val] == 'patient name' or labels[val] == 'birthdate' or labels[val] == 'sex' or labels[val] == 'patient status'):
+            final_text = final_text + ', '
+            json_data[labels[val]] = ''
 
         #admission and discharge info
         if admit_discharge == 1 and ('admission' in labels[val] or labels[val] == 'discharge hour'):
