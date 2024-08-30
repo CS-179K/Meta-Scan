@@ -25,9 +25,9 @@ Installation Instructions
 
 ```
 sudo apt install pip
-pip install flask
-pip install pytesseract
 pip install pytest
+pip install pytesseract
+pip install flask
 
 //start server
 cd WindowsStuff
