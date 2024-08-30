@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify, redirect, url_for
+from flask import Flask, request, render_template, jsonify, redirect, url_for, send_file
 from PIL import Image, ImageDraw
 import pytesseract
 import json
@@ -25,6 +25,16 @@ def load_data():
 def save_data(data):
     with open(DATA_FILE, 'w') as file:
         json.dump(data, file, indent=4)
+
+@app.route('/download-json')
+def download_json():
+    try:
+        json_file_path = 'data.json'
+        return send_file(json_file_path, as_attachment=True, download_name='document_data.json')
+    except Exception as e:
+        print(f"Error sending file: {e}")
+        return jsonify({'success': False, 'message': 'File not found or error occurred'}), 500
+
 
 @app.route('/')
 def index():
@@ -589,7 +599,7 @@ def update_json():
         if not updated_data:
             return jsonify({'success': False, 'message': 'No data received'}), 400
 
-        # Save the updated data to a JSON file (adjust the file path as necessary)
+        # Save the updated data to a JSON file
         with open('data.json', 'w') as json_file:
             json.dump(updated_data, json_file, indent=4)
 
