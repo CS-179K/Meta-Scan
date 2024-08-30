@@ -45,13 +45,23 @@
             </tr>
         </thead>
         <tbody>
+            {% if 'errors' in json_data[0] %}
+            <tr>
+                <td>errors</td>
+                {% for document in json_data %}
+                <td contenteditable="true">{{ document['errors']|replace('\n', '<br>')|safe }}</td>
+                {% endfor %}
+            </tr>
+            {% endif %}
             {% for key in json_data[0].keys() %}
+                {% if key != 'errors' %}
                 <tr>
                     <td>{{ key }}</td>
                     {% for document in json_data %}
                         <td contenteditable="true">{{ document[key] }}</td>
                     {% endfor %}
                 </tr>
+                {% endif %}
             {% endfor %}
         </tbody>
     </table>
