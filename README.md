@@ -31,6 +31,7 @@ pip install pytesseract
 pip install flask
 
 //start server
+cd WindowsStuff
 python app.py
 
 //run tests
