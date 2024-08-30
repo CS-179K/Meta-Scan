@@ -68,6 +68,11 @@
     <button id="saveButton">Save Changes</button>
     <a href="/">Upload Another Document</a>
 
+    
+    <a href="{{ url_for('download_json') }}">
+        <button>Download JSON</button>
+    </a>
+
     <!-- JavaScript to handle saving edited values -->
     <script>
         document.getElementById('saveButton').addEventListener('click', function() {
@@ -79,7 +84,7 @@
                 let key = row.cells[0].innerText.trim();
 
                 row.querySelectorAll('td').forEach(function(cell, cellIndex) {
-                    if (cellIndex > 0) {  // Skip the first cell as it contains the key
+                    if (cellIndex > 0) {  // Skip the first cell thing
                         let value = cell.innerText.trim();
                         if (!updatedData[cellIndex - 1]) {
                             updatedData[cellIndex - 1] = {};
@@ -89,7 +94,7 @@
                 });
             });
 
-            // Send the updated data to the server via AJAX
+            // Send the updated data to the server
             fetch('/update-json', {
                 method: 'POST',
                 headers: {
@@ -102,7 +107,7 @@
                 // Update the table with the new data
                 if (data.success) {
                     alert('Changes saved successfully.');
-                    location.reload();  // Reload the page to reflect the changes
+                    location.reload();  
                 } else {
                     alert('Failed to save changes.');
                 }
