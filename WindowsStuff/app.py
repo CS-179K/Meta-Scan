@@ -97,6 +97,18 @@ def validate_date(date_string):
         return True
     else:
         return False
+    
+#Checks address format is correct
+def valid_address(address):
+    # [Street Number] [Street Name] [Street Suffix], [City], [State] [ZIP Code]
+    pattern = r'^\d+\s+\w+(\s\w+)*,\s*[A-Za-z\s]+,\s*[A-Z]{2}\s*\d{5}$'
+    
+    # Match the address with the pattern
+    if re.match(pattern, address):
+        return True
+    else:
+        return False
+    
 #Tests for this are located in ../test/test_fieldValidation 
 
 def process_image(image_path, patient, admit_discharge, insurance, provider, occurance, value, payer):
@@ -407,13 +419,36 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
             extracted_text = pytesseract.image_to_string(roi).strip()
             final_text = final_text + ', ' + extracted_text 
             json_data[labels[val]] = extracted_text
-            if 'bill-type' in labels[val] or 'Medical Recipient num' in labels[val] or 'fed tax num' in labels[val] or 'ACDT' in labels[val] or 'p. rel' in labels[val] or 'doc control' in labels[val]:
+            if 'Medical Recipient num' in labels[val] or 'fed tax num' in labels[val] or 'ACDT' in labels[val] or 'p. rel' in labels[val] or 'doc control' in labels[val] or 'cc' in labels[val] or 'employer' in labels[val] or 'group name' in labels[val] or 'treatment auth' in labels[val] or 'doc control' in labels[val] or 'npi' in labels[val]:
                 if extracted_text.isalnum() or extracted_text == '':
+                    #npi 10 alphanumeric digits
+                    if 'npi' in labels[val]:
+                        if len(extracted_text) != 10:
+                            err_array[val] = 1
+                        else:
+                            err_array[val] = 0
                     err_array[val] = 0
                 else: 
                     err_array[val] = 1
-                    print("Error: value must be a number:", extracted_text)
-                    comments = comments + "Error for " + labels[val] + ": value must be a number: " + extracted_text +'\n'
+                    print("Error: value must be alphanumeric:", extracted_text)
+                    comments = comments + "Error for " + labels[val] + ": value must be alphanumeric: " + extracted_text +'\n'
+            #verify numeric
+            elif 'bill-type' in labels[val]:
+                #bill-type: 4 digits with leading 0
+                if extracted_text.isnumeric():
+                    if extracted_text < 1 or extracted_text[0] != 0 or len(extracted_text) != 4:
+                        print("Error: value must be alphanumeric:", extracted_text)
+                        comments = comments + "Error for " + labels[val] + ": value must be alphanumeric: " + extracted_text +'\n'
+                        err_array[val] = 1
+                    else:
+                        err_array[val] = 0
+                
+            #verify alphabetical for insured person's name
+            elif 'insured' in labels[val]:
+                if extracted_text.isalpha():
+                    err_array[val] = 0
+                else:
+                    err_array[val] = 1
         elif insurance == 0 and (labels[val] == 'bill-type' or labels[val] == 'Medical Recipient num' or labels[val] == 'fed tax num' or labels[val] == 'cc' or labels[val] == 'ACDT' or 'insured' in labels[val] or 'employer' in labels[val] or 'treatment auth' in labels[val] or 'p. rel' in labels[val] or 'group name' in labels[val] or 'doc control' in labels[val] or 'npi' in labels[val]):
             final_text = final_text + ', '
             json_data[labels[val]] = ''
@@ -432,6 +467,13 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
                     print("Error for " + labels[val] + ": Invalid date value:", extracted_text)
                     comments = comments + "Error: Invalid date value: " + extracted_text +'\n'
                     err_array[val] = 1
+            elif 'address' in labels[val]:
+                if valid_address(extracted_text):
+                    err_array[val] = 0
+                else:
+                    print("Error for " + labels[val] + ": Invalid address value:", extracted_text)
+                    comments = comments + "Error: Invalid address value: " + extracted_text +'\n'
+                    err_array[val] = 1
         elif provider == 0 and (labels[val] == 'statement to' or 'address' in labels[val] or labels[val] == 'statement from'):
             final_text = final_text + ', '
             json_data[labels[val]] = ''
@@ -448,8 +490,8 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
                     err_array[val] = 0
                 else: 
                     err_array[val] = 1
-                    print("Error: value must be a number:", extracted_text)
-                    comments = comments + "Error for " + labels[val] + ": value must be a number: " + extracted_text +'\n'
+                    print("Error: value must be alphanumeric:", extracted_text)
+                    comments = comments + "Error for " + labels[val] + ": value must be alphanumeric: " + extracted_text +'\n'
             elif 'span from' in labels[val] or 'span through' in labels[val]:
                 if validate_date(extracted_text):
                     err_array[val] = 0
@@ -476,8 +518,8 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
                 err_array[val] = 0
             else: 
                 err_array[val] = 1
-                print("Error: value must be a number:", extracted_text)
-                comments = comments + "Error for " + labels[val] + ": value must be a number: " + extracted_text +'\n'
+                print("Error: value must be alphanumeric:", extracted_text)
+                comments = comments + "Error for " + labels[val] + ": value must be alphanumeric: " + extracted_text +'\n'
 
 
         elif value == 0 and ('value code' in labels[val] or 'value amount' in labels[val]):
@@ -499,8 +541,24 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
                     err_array[val] = 0
                 else: 
                     err_array[val] = 1
-                    print("Error: value must be a number:", extracted_text)
-                    comments = comments + "Error for " + labels[val] + ": value must be a number: " + extracted_text +'\n'
+                    print("Error: value must be alphanumeric:", extracted_text)
+                    comments = comments + "Error for " + labels[val] + ": value must be alphanumeric: " + extracted_text +'\n'
+            elif 'payer' in labels[val] or 'health plan' in labels[val] or 'asg ben' in labels[val]:
+                if cleaned_text.isalnum() or extracted_text == '':
+                    err_array[val] = 0
+                else: 
+                    err_array[val] = 1
+                    print("Error: value must be alphanumeric:", extracted_text)
+                    comments = comments + "Error for " + labels[val] + ": value must be alphanumeric: " + extracted_text +'\n'
+            elif 'Rel Info' in labels[val]:
+                extracted_text = extracted_text.strip()
+                extracted_text = extracted_text.upper
+                if extracted_text == 'F' or extracted_text == 'M':
+                    err_array[val] = 0
+                else:
+                    err_array[val] = 1
+                    print("Error: value must be M or F:", extracted_text)
+                    comments = comments + "Error for " + labels[val] + ": value must be M or F: " + extracted_text +'\n'
 
         elif payer == 0 and ('payer' in labels[val] or 'pay' in labels[val] or 'Rel Info' in labels[val] or 'health plan' in labels[val] or 'asg ben' in labels[val] or 'amount due' in labels[val]):
             final_text = final_text + ', '
