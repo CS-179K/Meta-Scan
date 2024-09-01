@@ -20,8 +20,9 @@ Installation Instructions
 4. Run the command pip install pytest in order to install pytest
 5. Run the command pip install pytesseract in order to insall pytesseract
 6. Run the command pip install flask in order to install flask
-7. Run the command python app.py in order to start the server
-8. Click on the link in the terminal in order to go to the webpage
+7. Run the command cd WindowsStuff in order to navigate to the correct folder
+8. Run the command python app.py in order to start the server
+9. Click on the link in the terminal in order to go to the webpage
 
 ```
 sudo apt install pip
@@ -44,10 +45,21 @@ python -m pytest
 **Add More Files Button** - Promts you to upload another file and the processed data is appeneded below the initial UB-04 form.<br/>
 **Download Button** - Downloads the CSV with the processed information to your files.<br/>
 **Leave Feedback Button** - Takes you to another page where you can select your feedback type and write out your feedback for MetaScan.<br/>
+**About Button** - Takes you to the about page where there is a tutorial on how to use MetaScan
 **Submit Feedback Button** - Press to send your feedback.<br/>
 **Home Button** - Takes you back to the homepage.
 
 ## Details
+### User Stories
+- As a person who processes ub-04 forms, I want to be able to leave feedback that the development team can act on
+- As an employee, I want to be able to receive data that I'm interested in and save or discard others
+- As a person who processes many ub-04 forms for multiple patients, I want a way to upload an array of images, and have them all process at once
+- As a new user, I want a tutorial to teach me how to use the software if I can't figure it out myself
+- As an employee, I want to the program to be able to validate the documents for indiscrepancies and errors
+- As a user, I want the interface to be intuitive on my devices and easy to navigate
+- As a user, I want to be able to use the application on my different devices (MacOS, Windows, etc)
+- As someone who uses the data extracted from the ob-04 form, I want to be able to extract the data as a CSV file
+
 ### Major Functional Features
 1. **Document Upload**: Allows users to upload medical documents. (Story Points: 3)
 2. **OCR**: Converts the image into data values. (Story Points: 6)
@@ -76,11 +88,11 @@ python -m pytest
 ### Python Libraries:
 1. **OpenCV**: image processing
 2. **PyTesseract**: img -> text
-3. **Pandas**: data manipulation
-4. **Tkinter or PyQt**: UI
+3. **smtplib**: send emails
 
 ### Executive Design:
 https://docs.google.com/document/d/1ot5YUuMUkqlNLCF3K9zoNZ_bk0Xqz00ZRUvFPL0qYXA/edit?usp=sharing
 
 ## Architecture
-![meta_scan_architecture](https://github.com/user-attachments/assets/bf7e0851-ecc9-4cbd-ad06-26af4615f3da)
+![meta_scan_architecture (1)](https://github.com/user-attachments/assets/d7866988-21d9-4245-b81d-4ed26ba01424)
+
