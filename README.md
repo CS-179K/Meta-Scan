@@ -90,8 +90,8 @@ python -m pytest
 2. **PyTesseract**: img -> text
 3. **smtplib**: send emails
 
-### Executive Design:
-https://docs.google.com/document/d/1ot5YUuMUkqlNLCF3K9zoNZ_bk0Xqz00ZRUvFPL0qYXA/edit?usp=sharing
+### Final Design Report:
+[https://docs.google.com/document/d/1ot5YUuMUkqlNLCF3K9zoNZ_bk0Xqz00ZRUvFPL0qYXA/edit?usp=sharing](https://docs.google.com/document/d/18dtr7a9fTweZALLGFuHJozUKClPUyk0Ot-HKsm6Hn10/edit?usp=sharing)
 
 ## Architecture
 ![meta_scan_architecture (1)](https://github.com/user-attachments/assets/d7866988-21d9-4245-b81d-4ed26ba01424)
