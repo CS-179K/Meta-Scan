@@ -1,10 +1,9 @@
-from flask import Flask, request, render_template, jsonify, redirect, url_for, send_file
+from flask import Flask, request, render_template, jsonify, redirect, url_for
 from PIL import Image, ImageDraw
 import pytesseract
 import json
 import os
 import smtplib
-import re
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -25,16 +24,6 @@ def load_data():
 def save_data(data):
     with open(DATA_FILE, 'w') as file:
         json.dump(data, file, indent=4)
-
-@app.route('/download-json')
-def download_json():
-    try:
-        json_file_path = 'data.json'
-        return send_file(json_file_path, as_attachment=True, download_name='document_data.json')
-    except Exception as e:
-        print(f"Error sending file: {e}")
-        return jsonify({'success': False, 'message': 'File not found or error occurred'}), 500
-
 
 @app.route('/')
 def index():
@@ -80,36 +69,6 @@ def view_documents():
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'jpg', 'jpeg', 'png'}
-
-
-#--Error Checking and Validation--
-err_array = [0] * 124
-
-#--some functions used for validation:
-#Checks MM-DD-YYYY format
-def validate_date(date_string):
-    # Regular expression pattern for MM-DD-YYYY format
-    pattern = r"^(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])-\d{4}$"
-    pattern2 = r"^(0[1-9]|1[0-2])/(0[1-9]|1[0-9]|2[0-9]|3[0-1])/\d{4}$"
-
-    # Check if the date string matches the pattern
-    if re.match(pattern, date_string) or re.match(pattern2, date_string):
-        return True
-    else:
-        return False
-    
-#Checks address format is correct
-def valid_address(address):
-    # [Street Number] [Street Name] [Street Suffix], [City], [State] [ZIP Code]
-    pattern = r'^\d+\s+\w+(\s\w+)*,\s*[A-Za-z\s]+,\s*[A-Z]{2}\s*\d{5}$'
-    
-    # Match the address with the pattern
-    if re.match(pattern, address):
-        return True
-    else:
-        return False
-    
-#Tests for this are located in ../test/test_fieldValidation 
 
 def process_image(image_path, patient, admit_discharge, insurance, provider, occurance, value, payer):
     image = Image.open(image_path)
@@ -244,19 +203,10 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
     yVals += Yvals2
     Width += Width2
     Height += Height2
-    comments=''
+
     # categorize the sections so the user can choose what they want to get in the csv
     draw = ImageDraw.Draw(image)
     final_text = ''
-    roi = image.crop((63, 58, 790, 101))
-    extracted_text = pytesseract.image_to_string(roi).strip()
-    roi = image.crop((46, 107, 790, 151))
-    extracted_text = extracted_text + ' ' + pytesseract.image_to_string(roi).strip()
-    roi = image.crop((46, 157, 790, 201))
-    extracted_text = extracted_text + ' ' + pytesseract.image_to_string(roi).strip()
-    roi = image.crop((46, 207, 790, 250))
-    extracted_text = extracted_text + ' ' + pytesseract.image_to_string(roi).strip()
-    json_data['Hospital'] = extracted_text
     for val in range(len(labels)):
         #draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
         #patient info
@@ -264,60 +214,6 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
             draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
             roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
             extracted_text = pytesseract.image_to_string(roi).strip()
-
-            #validation
-            #verify patient ctrl num is alphanumeric
-            if labels[val] == 'Patient control num':
-                if extracted_text.isalnum() or extracted_text == '':
-                    err_array[val] = 0
-                else:
-                    err_array[val] = 1
-                    print("Error: Invalid patient control number value:", extracted_text)
-                    comments = comments + "Error: Invalid patient control number value: " + extracted_text + '\n'
-
-            #verify patient name is alphabetical
-            elif 'patient name' in labels[val]:
-                cleaned_text = extracted_text.replace(" ", "")
-                if cleaned_text.isalpha() or extracted_text == '':
-                    err_array[val] = 0
-                else:
-                    print("Error: Invalid patient name value:", extracted_text)
-                    comments = comments + "Error: Invalid patient name value:" + extracted_text + '\n'
-                    err_array[val] = 1
-            
-            #verify date format and validity MM-DD-YYYY
-            elif 'birthdate' in labels[val]:
-                if validate_date(extracted_text) or extracted_text == '':
-                    err_array[val] = 0
-                else:
-                    comments = comments + "Error: Invalid birthdate value: " + extracted_text + '\n'
-                    err_array[val] = 1
-
-            #M or F
-            elif 'sex' in labels[val]:
-                extracted_text = extracted_text.upper()  # Convert to uppercase for case-insensitive comparison
-                if extracted_text not in ('M', 'F', 'MALE', 'FEMALE', 'Male', 'Female') and extracted_text != '':
-                    # Handle invalid sex value
-                    comments = comments + "Error: Invalid sex value:" + extracted_text +'\n'
-                    err_array[val] = 1
-                else:
-                    # Valid sex value, set labels[val] to 0
-                    err_array[val] = 0
-
-            #01-19, 30, numeric
-            elif 'patientStatus' in labels[val]:
-                extracted_text = extracted_text.strip()  # Remove leading/trailing whitespace
-                try:
-                    age = int(extracted_text)
-                    if 0 <= age <= 19 or age == 30 or extracted_text == '':
-                        err_array[val] = 0
-                    else:
-                        comments = comments + "Error for " + labels[val] +": Invalid patient status value: " + extracted_text +'\n'
-                        err_array[val] = 1
-                except ValueError:
-                    print("Error for " + labels[val] + ": Invalid patient status format:", extracted_text)
-                    err_array[val] = 1
-                    
             final_text = final_text + ', ' + extracted_text
             json_data[labels[val]] = extracted_text
         elif patient == 0 and (labels[val] == 'Patient control num' or labels[val] == 'patient name' or labels[val] == 'birthdate' or labels[val] == 'sex' or labels[val] == 'patient status'):
@@ -329,85 +225,8 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
             draw.rectangle([xVals[val], yVals[val], Width[val], Height[val]], outline="red", width=2)
             roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
             extracted_text = pytesseract.image_to_string(roi).strip()
-
-            #validation
-            #consider checking if outpatient(causes many cases to be optional)
-            #'admission date', 'admission hour', 'admission type', 'admission src'
-            #admission date
-            if 'admission date' in labels[val]:
-                if validate_date(extracted_text) or extracted_text == '':
-                    err_array[val] = 0
-                else:
-                    print("Error: Invalid admission date value:", extracted_text)
-                    comments = comments + "Error for " + labels[val] + ":Invalid admission date value: " + extracted_text +'\n'
-                    err_array[val] = 1
-            
-            #admission hour
-            elif 'admission hour' in labels[val]:
-                #extracted_text = extracted_text.strip()  # Remove leading/trailing whitespace
-                try:
-                    hour = int(extracted_text)
-                    if (0 <= hour <= 23) or extracted_text == '':
-                        err_array[val] = 0
-                    else:
-                        print("Error for " + labels[val] + ": Invalid admission hour value:", extracted_text)
-                        comments = comments + "Error:Invalid admission hour value: " + extracted_text +'\n'
-                        err_array[val] = 1
-                except ValueError:
-                    print("Error for " + labels[val] + ": Invalid admission hour format:", extracted_text)
-                    comments = comments + "Error:Invalid admission hour value: " + extracted_text +'\n'
-                    err_array[val] = 1
-
-            #admission type
-            elif 'admission type' in labels[val]:
-                #extracted_text = extracted_text.strip()  # Remove leading/trailing whitespace
-                try:
-                    type = int(extracted_text)
-                    if 0 <= type <= 3 or type == 5 or type == 9 or extracted_text == '':
-                        err_array[val] = 0
-                    else:
-                        print("Error: Invalid admission type value:", extracted_text)
-                        comments = comments + "Error for " + labels[val] + ": Invalid admission type value: " + extracted_text +'\n'
-                        err_array[val] = 1
-                except ValueError:
-                    print("Error for " + labels[val] + ": Invalid admission type format:", extracted_text)
-                    comments = comments + "Error for " + labels[val] + ": Invalid admission type value: " + extracted_text +'\n'
-                    err_array[val] = 1
-
-            #admission src
-            elif 'admission src' in labels[val]:
-                #extracted_text = extracted_text.strip()  # Remove leading/trailing whitespace
-                try:
-                    src = int(extracted_text)
-                    if (0 <= src <= 9) or extracted_text == '':
-                        err_array[val] = 0
-                    else:
-                        print("Error: Invalid admission src value:", extracted_text)
-                        comments = comments + "Error for " + labels[val] + ": Invalid admission src value: " + extracted_text +'\n'
-                        err_array[val] = 1
-                except ValueError:
-                    print("Error: Invalid admission src format:", extracted_text)
-                    comments = comments + "Error for " + labels[val] + ": Invalid admission src format: " + extracted_text +'\n'
-                    err_array[val] = 1
-
-            #discharge hour
-            elif 'discharge hour' in labels[val]:
-                #extracted_text = extracted_text.strip()  # Remove leading/trailing whitespace
-                try:
-                    hour = int(extracted_text)
-                    if (0 <= hour <= 23) or extracted_text == '':
-                        err_array[val] = 0
-                    else:
-                        print("Error: Invalid discharge hour value:", extracted_text)
-                        comments = comments + "Error for " + labels[val] + ": Invalid discharge hour value: " + extracted_text +'\n'
-                        err_array[val] = 1
-                except ValueError:
-                    print("Error: Invalid discharge hour format:", extracted_text)
-                    comments = comments + "Error for " + labels[val] + ": Invalid discharge hour format: " + extracted_text +'\n'
-                    err_array[val] = 1
-
             final_text = final_text + ', ' + extracted_text
-            json_data[labels[val]] = extracted_text
+            json_data[labels[val]] = extracted_text  
         elif admit_discharge == 0 and ('admission' in labels[val] or labels[val] == 'discharge hour'):
             final_text = final_text + ', '
             json_data[labels[val]] = ''
@@ -418,37 +237,7 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
             roi = image.crop((xVals[val], yVals[val], Width[val], Height[val]))
             extracted_text = pytesseract.image_to_string(roi).strip()
             final_text = final_text + ', ' + extracted_text 
-            json_data[labels[val]] = extracted_text
-            if 'Medical Recipient num' in labels[val] or 'fed tax num' in labels[val] or 'ACDT' in labels[val] or 'p. rel' in labels[val] or 'doc control' in labels[val] or 'cc' in labels[val] or 'employer' in labels[val] or 'group name' in labels[val] or 'treatment auth' in labels[val] or 'doc control' in labels[val] or 'npi' in labels[val]:
-                if extracted_text.isalnum() or extracted_text == '':
-                    #npi 10 alphanumeric digits
-                    if 'npi' in labels[val]:
-                        if len(extracted_text) != 10:
-                            err_array[val] = 1
-                        else:
-                            err_array[val] = 0
-                    err_array[val] = 0
-                else: 
-                    err_array[val] = 1
-                    print("Error: value must be alphanumeric:", extracted_text)
-                    comments = comments + "Error for " + labels[val] + ": value must be alphanumeric: " + extracted_text +'\n'
-            #verify numeric
-            elif 'bill-type' in labels[val]:
-                #bill-type: 4 digits with leading 0
-                if extracted_text.isnumeric():
-                    if extracted_text < 1 or extracted_text[0] != 0 or len(extracted_text) != 4:
-                        print("Error: value must be alphanumeric:", extracted_text)
-                        comments = comments + "Error for " + labels[val] + ": value must be alphanumeric: " + extracted_text +'\n'
-                        err_array[val] = 1
-                    else:
-                        err_array[val] = 0
-                
-            #verify alphabetical for insured person's name
-            elif 'insured' in labels[val]:
-                if extracted_text.isalpha():
-                    err_array[val] = 0
-                else:
-                    err_array[val] = 1
+            json_data[labels[val]] = extracted_text 
         elif insurance == 0 and (labels[val] == 'bill-type' or labels[val] == 'Medical Recipient num' or labels[val] == 'fed tax num' or labels[val] == 'cc' or labels[val] == 'ACDT' or 'insured' in labels[val] or 'employer' in labels[val] or 'treatment auth' in labels[val] or 'p. rel' in labels[val] or 'group name' in labels[val] or 'doc control' in labels[val] or 'npi' in labels[val]):
             final_text = final_text + ', '
             json_data[labels[val]] = ''
@@ -460,20 +249,6 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
             extracted_text = pytesseract.image_to_string(roi).strip()
             final_text = final_text + ', ' + extracted_text
             json_data[labels[val]] = extracted_text
-            if 'statement to' in labels[val] or 'statement from' in labels[val]:
-                if validate_date(extracted_text) or extracted_text == '':
-                    err_array[val] = 0
-                else:
-                    print("Error for " + labels[val] + ": Invalid date value:", extracted_text)
-                    comments = comments + "Error: Invalid date value: " + extracted_text +'\n'
-                    err_array[val] = 1
-            elif 'address' in labels[val]:
-                if valid_address(extracted_text):
-                    err_array[val] = 0
-                else:
-                    print("Error for " + labels[val] + ": Invalid address value:", extracted_text)
-                    comments = comments + "Error: Invalid address value: " + extracted_text +'\n'
-                    err_array[val] = 1
         elif provider == 0 and (labels[val] == 'statement to' or 'address' in labels[val] or labels[val] == 'statement from'):
             final_text = final_text + ', '
             json_data[labels[val]] = ''
@@ -485,21 +260,6 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
             extracted_text = pytesseract.image_to_string(roi).strip()
             final_text = final_text + ', ' + extracted_text
             json_data[labels[val]] = extracted_text
-            if 'occurance code' in labels[val] or 'span code' in labels[val]:
-                if extracted_text.isalnum() or extracted_text == '':
-                    err_array[val] = 0
-                else: 
-                    err_array[val] = 1
-                    print("Error: value must be alphanumeric:", extracted_text)
-                    comments = comments + "Error for " + labels[val] + ": value must be alphanumeric: " + extracted_text +'\n'
-            elif 'span from' in labels[val] or 'span through' in labels[val]:
-                if validate_date(extracted_text):
-                    err_array[val] = 0
-                else:
-                    print("Error for " + labels[val] + ": Invalid date value:", extracted_text)
-                    comments = comments + "Error: Invalid date value: " + extracted_text +'\n'
-                    err_array[val] = 1
-
         elif occurance == 0 and ('occurance' in labels[val] or 'occurance' in labels[val] or 'span' in labels[val]):
             final_text = final_text + ', '
             json_data[labels[val]] = ''
@@ -511,17 +271,6 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
             extracted_text = pytesseract.image_to_string(roi).strip()
             final_text = final_text + ', ' + extracted_text
             json_data[labels[val]] = extracted_text
-            cleaned_text = extracted_text.replace('$', '')
-            cleaned_text = cleaned_text.replace('.', '')
-            cleaned_text = cleaned_text.replace(',', '')
-            if cleaned_text.isalnum() or extracted_text == '':
-                err_array[val] = 0
-            else: 
-                err_array[val] = 1
-                print("Error: value must be alphanumeric:", extracted_text)
-                comments = comments + "Error for " + labels[val] + ": value must be alphanumeric: " + extracted_text +'\n'
-
-
         elif value == 0 and ('value code' in labels[val] or 'value amount' in labels[val]):
             final_text = final_text + ', '
             json_data[labels[val]] = ''
@@ -533,37 +282,10 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
             extracted_text = pytesseract.image_to_string(roi).strip()
             final_text = final_text + ', ' + extracted_text
             json_data[labels[val]] = extracted_text
-            if 'prior pay' in labels[val] or 'amount due' in labels[val]:
-                cleaned_text = extracted_text.replace('$', '')
-                cleaned_text = cleaned_text.replace('.', '')
-                cleaned_text = cleaned_text.replace(',', '')
-                if cleaned_text.isalnum() or extracted_text == '':
-                    err_array[val] = 0
-                else: 
-                    err_array[val] = 1
-                    print("Error: value must be alphanumeric:", extracted_text)
-                    comments = comments + "Error for " + labels[val] + ": value must be alphanumeric: " + extracted_text +'\n'
-            elif 'payer' in labels[val] or 'health plan' in labels[val] or 'asg ben' in labels[val]:
-                if cleaned_text.isalnum() or extracted_text == '':
-                    err_array[val] = 0
-                else: 
-                    err_array[val] = 1
-                    print("Error: value must be alphanumeric:", extracted_text)
-                    comments = comments + "Error for " + labels[val] + ": value must be alphanumeric: " + extracted_text +'\n'
-            elif 'Rel Info' in labels[val]:
-                extracted_text = extracted_text.strip()
-                extracted_text = extracted_text.upper
-                if extracted_text == 'F' or extracted_text == 'M':
-                    err_array[val] = 0
-                else:
-                    err_array[val] = 1
-                    print("Error: value must be M or F:", extracted_text)
-                    comments = comments + "Error for " + labels[val] + ": value must be M or F: " + extracted_text +'\n'
-
         elif payer == 0 and ('payer' in labels[val] or 'pay' in labels[val] or 'Rel Info' in labels[val] or 'health plan' in labels[val] or 'asg ben' in labels[val] or 'amount due' in labels[val]):
             final_text = final_text + ', '
             json_data[labels[val]] = ''
-
+    
     n = 0
     claimCodes=[906, 955, 1006, 1055, 1106, 1155, 1206, 1255, 1306, 1355, 1406, 1455, 1506, 1555, 1606, 1655, 1706, 1755, 1806, 1855, 1906, 1955]
     for i in range(22):
@@ -590,22 +312,20 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
             for num in range(1, k):
                 i = i + 1
                 Description = Description + ' ' + pytesseract.image_to_string(image.crop((187, claimCodes[i], 930, claimCodes[i] + 46))).strip()
-            i = j - 1
+            i = i - 1
             json_data[description_num] = Description
 
     if n < 22:
-        for m in range(n + 1, 22):
+        for m in range(n, 22):
             json_data[f" rev code {m}"] = ''
             json_data[f" HIPPS code {m}"] = ''
             json_data[f" Serv. Date {m}"] = ''
             json_data[f" Serv. Units {m}"] = ''
             json_data[f" Total Charges {m}"] = ''
             json_data[f" Uncovered Charges {m}"] = ''
-    json_data['errors'] = comments
-    return json_data
+    
 
-'''for element in err_array:
-    print(element)'''
+    return json_data
 
 @app.route('/feedback')
 def feedback():
@@ -657,7 +377,7 @@ def update_json():
         if not updated_data:
             return jsonify({'success': False, 'message': 'No data received'}), 400
 
-        # Save the updated data to a JSON file
+        # Save the updated data to a JSON file (adjust the file path as necessary)
         with open('data.json', 'w') as json_file:
             json.dump(updated_data, json_file, indent=4)
 
