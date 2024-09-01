@@ -96,7 +96,7 @@ def validate_date(date_string):
     if re.match(pattern, date_string) or re.match(pattern2, date_string):
         return True
     else:
-        return False 
+        return False
 
 def process_image(image_path, patient, admit_discharge, insurance, provider, occurance, value, payer):
     image = Image.open(image_path)
@@ -390,7 +390,7 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
                         err_array[val] = 1
                 except ValueError:
                     print("Error: Invalid discharge hour format:", extracted_text)
-                    comments = comments + "Error for " + labels[val] + ": Invalid discharge hour format: " + extracted_text +'\n'
+                    #comments = comments + "Error for " + labels[val] + ": Invalid discharge hour format: " + extracted_text +'\n'
                     err_array[val] = 1
 
             final_text = final_text + ', ' + extracted_text
