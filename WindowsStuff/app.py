@@ -10,7 +10,7 @@ from email.mime.multipart import MIMEMultipart
 
 app = Flask(__name__)
 
-# Path to store uploaded files and data
+# Path to files and data
 UPLOAD_FOLDER = 'uploads'
 DATA_FILE = 'data.json'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -96,8 +96,7 @@ def validate_date(date_string):
     if re.match(pattern, date_string) or re.match(pattern2, date_string):
         return True
     else:
-        return False
-#Tests for this are located in ../test/test_fieldValidation 
+        return False 
 
 def process_image(image_path, patient, admit_discharge, insurance, provider, occurance, value, payer):
     image = Image.open(image_path)
@@ -114,9 +113,9 @@ def process_image(image_path, patient, admit_discharge, insurance, provider, occ
         'statement to', 'patient name', 'address a', 'address b', 'address c', #2
         'address d', 'address e','birthdate', 'sex', 'admission date', #3
         'admission hour', 'admission type', 'admission src', 'discharge hour', 'patient status', #4
-        'cc', 'ACDT', 'occurence code 1', 'occurence date 1', #5
-        'occurence code 2', 'occurence date 2', 'occurence code 3', 'occurence date 3', 'occurence code 4', #6
-        'occurence date 1', 'span 1 code', 'span 1 from', 'span 1 through', 'span 2 code', #7
+        'cc', 'ACDT', 'occurance code 1', 'occurance date 1', #5
+        'occurance code 2', 'occurance date 2', 'occurance code 3', 'occurance date 3', 'occurance code 4', #6
+        'occurance date 1', 'span 1 code', 'span 1 from', 'span 1 through', 'span 2 code', #7
         'span 2 from', 'span 2 through', 'value code 1', 'value code 2', 'value code 3', #8
         'value code 4', 'value code 5', 'value code 6', 'value code 7', 'value code 8', #9
         'value code 9', 'value code 10', 'value code 11', 'value code 12', 'value amount 1', #10
