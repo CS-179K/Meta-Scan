@@ -50,9 +50,14 @@ python -m pytest
 **Home Button** - Takes you back to the homepage.
 
 ## Details
-### User Stories
+### Final Design Report:
+[https://docs.google.com/document/d/1ot5YUuMUkqlNLCF3K9zoNZ_bk0Xqz00ZRUvFPL0qYXA/edit?usp=sharing](https://docs.google.com/document/d/18dtr7a9fTweZALLGFuHJozUKClPUyk0Ot-HKsm6Hn10/edit?usp=sharing)
+
+### User Stories and Demos
 - As a person who processes ub-04 forms, I want to be able to leave feedback that the development team can act on
+  <br> &emsp; https://youtu.be/2Kptw2U5dBU
 - As an employee, I want to be able to receive data that I'm interested in and save or discard others
+  <br> &emsp; https://youtu.be/yU92igcdIBU
 - As a person who processes many ub-04 forms for multiple patients, I want a way to upload an array of images, and have them all process at once
 - As a new user, I want a tutorial to teach me how to use the software if I can't figure it out myself
 - As an employee, I want to the program to be able to validate the documents for indiscrepancies and errors
@@ -89,9 +94,6 @@ python -m pytest
 1. **OpenCV**: image processing
 2. **PyTesseract**: img -> text
 3. **smtplib**: send emails
-
-### Final Design Report:
-[https://docs.google.com/document/d/1ot5YUuMUkqlNLCF3K9zoNZ_bk0Xqz00ZRUvFPL0qYXA/edit?usp=sharing](https://docs.google.com/document/d/18dtr7a9fTweZALLGFuHJozUKClPUyk0Ot-HKsm6Hn10/edit?usp=sharing)
 
 ## Architecture
 ![meta_scan_architecture (1)](https://github.com/user-attachments/assets/d7866988-21d9-4245-b81d-4ed26ba01424)
