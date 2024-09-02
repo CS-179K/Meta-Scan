@@ -97,6 +97,17 @@ def validate_date(date_string):
         return True
     else:
         return False
+    
+#Checks address format is correct
+def valid_address(address):
+    # [Street Number] [Street Name] [Street Suffix], [City], [State] [ZIP Code]
+    pattern = r'^\d+\s+\w+(\s\w+)*,\s*[A-Za-z\s]+,\s*[A-Z]{2}\s*\d{5}$'
+
+    # Match the address with the pattern
+    if re.match(pattern, address):
+        return True
+    else:
+        return False
 
 def process_image(image_path, patient, admit_discharge, insurance, provider, occurance, value, payer):
     image = Image.open(image_path)

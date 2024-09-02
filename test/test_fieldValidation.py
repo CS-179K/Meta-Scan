@@ -2,6 +2,8 @@ import pytest
 import sys
 sys.path.append('../WindowsStuff')  # Add the parent directory to the Python path
 from app import validate_date  # Replace with the actual module name
+from app import valid_address
+
 def add(x, y):
     return x + y
 
@@ -93,9 +95,33 @@ def test_day_valid():
     ("2024-08-26", False),  # Incorrect format
     ("08-26", False),  # Missing year
 ])
-def test_validate_date_format2(date_string, expected_result):
+def test_validate_date_format(date_string, expected_result):
     """Tests the validate_date_format function."""
     assert validate_date(date_string) == expected_result
+
+#Address format Regex Validation
+@pytest.mark.parametrize("address, expected_result", [
+    # Valid address test cases
+    ("123 Main St, Springfield, IL 62701", True),
+    ("456 Elm St, Anytown, CA 90210", True),
+    ("789 Broadway Ave, New York, NY 10001", True),
+    ("1010 5th Ave, Los Angeles, CA 90001", True),
+    ("1600 Pennsylvania Ave NW, Washington, DC 20500", True),
+    
+    # Invalid address test cases
+    ("123 Main St Springfield, IL 62701", False),  # Missing comma after street
+    ("456 Elm St, Anytown, California 90210", False),  # Full state name instead of abbreviation
+    ("789 Broadway Ave, NY 10001", False),  # Missing city
+    ("Main St, Springfield, IL 62701", False),  # Missing street number
+    ("123 Main St, Springfield, IL", False),  # Missing ZIP code
+    ("123 Main St, Springfield, IL 6270", False),  # Invalid ZIP code length
+    ("", False),  # Empty string
+    ("123", False),  # Incomplete address
+    ("123 Main St, Springfield, ILL 62701", False),  # Invalid state abbreviation (3 letters)
+])
+def test_valid_address(address, expected_result):
+    """Tests the valid_address function."""
+    assert valid_address(address) == expected_result
 
 
 print("end")
