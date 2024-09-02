@@ -63,9 +63,11 @@ python -m pytest
 - As an employee, I want to the program to be able to validate the documents for indiscrepancies and errors
   <br> &emsp; https://youtu.be/i7BHoRHBKZw
 - As a user, I want the interface to be intuitive on my devices and easy to navigate
+  <br> &emsp; https://www.youtube.com/watch?v=kWKtUbSsxdU
 - As a user, I want to be able to use the application on my different devices (MacOS, Windows, etc)
   <br> &emsp; https://youtu.be/JyaaiEu9P3s
 - As someone who uses the data extracted from the ob-04 form, I want to be able to extract the data as a CSV file
+  <br> &emsp; https://www.youtube.com/watch?v=bPXc-pPXr-w
 
 ### Major Functional Features
 1. **Document Upload**: Allows users to upload medical documents. (Story Points: 3)
