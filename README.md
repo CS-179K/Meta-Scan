@@ -61,8 +61,10 @@ python -m pytest
 - As a person who processes many ub-04 forms for multiple patients, I want a way to upload an array of images, and have them all process at once
 - As a new user, I want a tutorial to teach me how to use the software if I can't figure it out myself
 - As an employee, I want to the program to be able to validate the documents for indiscrepancies and errors
+  <br> &emsp; https://youtu.be/i7BHoRHBKZw
 - As a user, I want the interface to be intuitive on my devices and easy to navigate
 - As a user, I want to be able to use the application on my different devices (MacOS, Windows, etc)
+  <br> &emsp; https://youtu.be/JyaaiEu9P3s
 - As someone who uses the data extracted from the ob-04 form, I want to be able to extract the data as a CSV file
 
 ### Major Functional Features
