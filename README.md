@@ -66,7 +66,7 @@ python -m pytest
   <br> &emsp; https://www.youtube.com/watch?v=kWKtUbSsxdU
 - As a user, I want to be able to use the application on my different devices (MacOS, Windows, etc)
   <br> &emsp; https://youtu.be/JyaaiEu9P3s
-- As someone who uses the data extracted from the ob-04 form, I want to be able to extract the data as a CSV file
+- As someone who uses the data extracted from the ob-04 form, I want to be able to extract the data as a JSON file
   <br> &emsp; https://www.youtube.com/watch?v=bPXc-pPXr-w
 
 ### Major Functional Features
