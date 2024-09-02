@@ -59,9 +59,9 @@ python -m pytest
 - As an employee, I want to be able to receive data that I'm interested in and save or discard others
   <br> &emsp; https://youtu.be/yU92igcdIBU
 - As a person who processes many ub-04 forms for multiple patients, I want a way to upload an array of images, and have them all process at once
-- <br> &emsp; https://youtu.be/YciVhre_0EI?feature=shared
+  <br> &emsp; https://youtu.be/YciVhre_0EI?feature=shared
 - As a new user, I want a tutorial to teach me how to use the software if I can't figure it out myself
-- <br> &emsp; https://youtu.be/Ll3cX6A5Jf8
+  <br> &emsp; https://youtu.be/Ll3cX6A5Jf8
 - As an employee, I want to the program to be able to validate the documents for indiscrepancies and errors
   <br> &emsp; https://youtu.be/i7BHoRHBKZw
 - As a user, I want the interface to be intuitive on my devices and easy to navigate
