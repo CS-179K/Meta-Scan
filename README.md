@@ -94,7 +94,8 @@ python -m pytest
 ### Techniques
 1. **Programming Languages**: Python
 2. **Web Dev Tools**: HTML/CSS/JS
-3. **JS Frameworks**: React/Node.js
+3. **Web Framework**: Flask
+4. **Testing**: pytest
 
 ### Python Libraries:
 1. **OpenCV**: image processing
@@ -103,4 +104,3 @@ python -m pytest
 
 ## Architecture
 ![meta_scan_architecture (1)](https://github.com/user-attachments/assets/d7866988-21d9-4245-b81d-4ed26ba01424)
-
